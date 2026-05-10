@@ -1,0 +1,59 @@
+/*body: used to center the complete application on the screen, display: flex -> activates Flexbox layout, align-items: center -> vertically centers the application, justify-content: center -> horizontally centers the application*/
+body{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+/*main container of the application: max-width -> sets a maximum width for the container, margin -> adds space around the container, background -> sets a background color, padding -> adds space inside the container, border-radius -> rounds the corners of the container, box-shadow -> adds a shadow effect to create a card-like appearance*/
+.app-container{
+	max-width: 500px;
+	margin: 40px;
+	background: #97b2ce;
+	padding: 20px;
+	border-radius: 12px;
+	box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+/*header section: text-align: center -> centers heading text, margin-bottom: 55px -> adds space below the header*/
+.header{
+	text-align: center;
+	margin-bottom: 55px;
+}
+/*expense form layout: display: flex -> keeps input fields and button in one row, gap -> creates space between them, margin-bottom -> adds space below the form*/
+.expense-form{
+	display: flex;
+	gap: 10px;
+	margin-bottom: 20px;
+}
+/*i/p fields styling: flex: 1 -> i/p takes available space equally, padding -> adds space inside the input field, border-radius -> rounds the corners of the input field*/
+.expense-form input {
+	flex: 1;
+	padding: 8px;
+	border-radius: 19px;
+}
+/*add expense btn styling: cursor: pointer -> shows hand cursor when hovered, padding -> adds space inside the btn, border-radius -> rounds the corners of the btn, background-color -> sets the background color of the btn*/
+.expense-form button {
+	padding: 8px 12px;
+	cursor: pointer;
+	border-radius: 19px;
+	background-color: green;
+}
+/*expense list container: flex-direction: column -> expenses shown vertically, gap -> creates space between them*/
+.expense-list {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+/*each expense item card: display: flex -> activates Flexbox layout, justify-content: space-between -> keeps title, amount, and delete button properly spaced, align-items: center -> vertically centers the content, background: white -> sets the background color, padding -> adds space inside the card, border-radius -> rounds the corners of the card*/
+.expense-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: white;
+	padding: 10px;
+	border-radius: 8px;
+}
+/*shown when no any expense exists*/
+.no-expense {
+	text-align: center;
+	color: #252424;
+}
