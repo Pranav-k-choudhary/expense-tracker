@@ -12,6 +12,7 @@ body{
 }
 /*main container of the application: max-width -> sets a maximum width for the container, margin -> adds space around the container, background -> sets a background color, padding -> adds space inside the container, border-radius -> rounds the corners of the container, box-shadow -> adds a shadow effect to create a card-like appearance*/
 .app-container{
+	position: relative;
 	max-width: 500px;
 	margin: 40px;
 	background: #97b2ce;
@@ -43,6 +44,9 @@ body{
 	border-radius: 19px;
 	background-color: green;
 }
+.expense-form button:hover {
+	background-color: #45a049;
+}
 /*expense list container: flex-direction: column -> expenses shown vertically, gap -> creates space between them*/
 .expense-list {
 	display: flex;
@@ -64,6 +68,7 @@ body{
 	color: #252424;
 }
 /*fore mobile*/
+/*when screen width is less than 600px then app container is adjusted*/
 @media(max-width: 600px){
 	.app-container {
 		max-width: 100%;
@@ -77,4 +82,59 @@ body{
 	.expense-form button {
 		width: 100%;
 	}
+}
+
+
+/*Login page*/
+/*login page container: text-align: center -> centers the content, margin-top: 80px -> adds space above the container*/
+h2{
+	margin-bottom: 30px;
+	padding: 15px;
+}
+.login-container {
+	text-align: center;
+	margin-top: 80px;
+	background-color: #97b2ce;
+	border-radius: 9px;
+
+}
+/*i/p fields styling: display: block -> makes input fields take full width, margin -> adds space around the input fields, padding -> adds space inside the input fields, width -> sets a fixed width for the input fields, border-radius -> rounds the corners of the input fields, border -> adds a border around the input fields*/
+.login-input {
+	display: block;
+	margin: 10px auto;
+	padding: 10px;
+	width: 250px;
+	border-radius: 15px;
+	border: 1px solid gray;
+}
+/*login button styling: margin -> adds space around the button, padding -> adds space inside the button, cursor: pointer -> shows hand cursor when hovered, border-radius -> rounds the corners of the button, background -> sets the background color of the button, color -> sets the text color of the button, border -> removes default border*/
+.login-btn {
+	margin: 10px;
+	padding: 10px 15px;
+	cursor: pointer;
+	border-radius: 16px;
+	background: green;
+	color: white;
+	border: none;
+}
+/*login button hover effect: background -> changes background color when hovered*/
+.login-btn:hover {
+	background: #45a049;
+}
+
+/*logout button styling: position: absolute -> positions the button relative to the nearest positioned ancestor, top and right -> positions the button at the top-right corner of the container, background -> sets the background color of the button, color -> sets the text color of the button, border -> removes default border, padding -> adds space inside the button, border-radius -> rounds the corners of the button, cursor: pointer -> shows hand cursor when hovered*/
+.logout-btn {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: red;
+	color: white;
+	border: none;
+	padding: 8px 12px;
+	border-radius: 16px;
+	cursor: pointer;
+}
+/*logout button hover effect: background -> changes background color when hovered*/
+.logout-btn:hover {
+	background: darkred;
 }

@@ -19,7 +19,7 @@ function ExpenseItem({ item, onDelete }) {
         <span>{item.title}</span>
         {/*display expense amount when item.amount is available in the item object it shows the amount of the expense*/}
         <span>₹{item.amount}</span>
-        {/*delete btn:- when user clicks ❌ btn:- onDelete(item.id) runs and it calls the onDelete function passed as a prop with the id of the current expense item, this allows the parent component to identify which expense to remove from the list.
+        {/*delete btn:- when user clicks btn:- onDelete(item.id) runs and it calls the onDelete function passed as a prop with the id of the current expense item, this allows the parent component to identify which expense to remove from the list.
         this sends the expense id to parent
         so that the selected expense can be removed*/}
         <button onClick={() => onDelete(item.id)}>❌</button>
