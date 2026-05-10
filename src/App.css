@@ -1,3 +1,9 @@
+/*reset*/
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
 /*body: used to center the complete application on the screen, display: flex -> activates Flexbox layout, align-items: center -> vertically centers the application, justify-content: center -> horizontally centers the application*/
 body{
 	display: flex;
@@ -56,4 +62,19 @@ body{
 .no-expense {
 	text-align: center;
 	color: #252424;
+}
+/*fore mobile*/
+@media(max-width: 600px){
+	.app-container {
+		max-width: 100%;
+		padding: 15px;
+	}
+
+	.expense-form {
+		flex-direction: column;
+	}
+
+	.expense-form button {
+		width: 100%;
+	}
 }
