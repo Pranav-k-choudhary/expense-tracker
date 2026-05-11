@@ -9,22 +9,12 @@ Main Concepts Used:-
 import { useState, useEffect } from 'react'
 import ExpenseForm from './ExpenseForm'
 import ExpenseList from './ExpenseList'
-import Login from './Login'
+import { useAuth0 } from "@auth0/auth0-react";
+import Login from "./Login";
 import './App.css'
 
 function App() {
-  /*user auth state:- 
-  --> stores log-in user info
-  --> if user exists in localStorage -> auto login*/
-  const [user, setUser] = useState(() => {
-    const session = localStorage.getItem("session");
-    const savedUser = localStorage.getItem("user");
-
-    if (session === "active" && savedUser) {
-      return JSON.parse(savedUser);
-   }
-   return null;
-  });
+  const { isAuthenticated, logout } = useAuth0();
 
   /*useState with function initialization, why -> it loads saved expenses from localStorage when app starts, if data exists -> JSON.parse converts string to array, else -> empty array []*/
   const [expenses, setExpenses] = useState(() => {
@@ -36,19 +26,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses))
   },[expenses])
-
-  /*login handler:- saves user data after successful login, handleLogin -> function to handle login when user logs in function checks if user is valid then saves user data in localStorage, loggedUser -> user data passed when login is successful, setItem -> function to save data in localStorage*/
-  const handleLogin = (loggedUser) => {
-    setUser(loggedUser);
-    localStorage.setItem("user", JSON.stringify(loggedUser));
-    localStorage.setItem("session", "active"); 
-  };
-  /*logout handler:- clears user session and removes data, logout -> function to handle logout when user clicks logout button then user is set to null and user data is removed from localStorage and move to login page from current page*/
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("session");
-  };
-
 
   /*add new expense, prev -> previous expenses array, [...prev, expense] -> old expenses + new expense*/
   const addExpense = (expense) => {
@@ -63,29 +40,43 @@ function App() {
   /*reduce(), used to calculate total expenses, sum -> accumulated(jama hua total) value, item.amount -> each expense amount*/
   const totalExpenses  = expenses.reduce((sum, item) => sum + item.amount, 0)
 
-
-  
-  /*if user is not logged in -> show login page, if user state is null -> show Login component and pass setUser function as prop to handle login*/
-  if(!user){
-    return <Login setUser={handleLogin} />;
-  }
-
+  /*useAuth0 hook to get logout function, why -> we need it to log out user from Auth0 when they click logout button*/
   return (
-    //Main container of the application, it contains header, ExpenseForm, total expenses and ExpenseList
-    <div className="app-container">
-      {/*Header of the application*/}
-      <div className='header'>
-        <h1>💰 Expense Tracker</h1>
-        {/*Logout button:- when user clicks it, logout function runs and it clears user session and removes user data from localStorage and move to login page from current page, logout-btn -> for custom styling*/}
-        <button className="logout-btn" onClick={logout}>Logout</button>
-      </div>
-      {/*child component for adding expenses, onAddExpense -> function to add new expense*/}
-      <ExpenseForm onAddExpense={addExpense} />
-      {/*total expense display, totalExpenses -> calculated total expenses, totalExpenses.toFixed(2) -> formats the total to 2 decimal places*/}
-      <h3 className="total">Total Expense: ₹{totalExpenses.toFixed(2)}</h3>
-      {/*child component for showing expenses, expenses -> array of expenses, onDelete -> function to delete an expense*/}
-      <ExpenseList expenses={expenses} onDelete={deleteExpense} />
+
+    <div>
+      {!isAuthenticated ? (
+        <Login />
+      ) : (
+        <div className="app-container">
+          {/*header with logout*/}
+          <div className="header">
+            <h1>💰 Expense Tracker</h1>
+
+            <button
+              className="logout-btn"
+              onClick={() =>
+                logout({
+                  logoutParams: {
+                    returnTo: "http://localhost:5187/expense-tracker/",
+                  },
+                })
+              }
+            >
+              Logout
+            </button>
+          </div>
+          <ExpenseForm onAddExpense={addExpense} />
+          <h3 className="total">
+            Total Expense: ₹{totalExpenses.toFixed(2)}
+          </h3>
+          <ExpenseList
+            expenses={expenses}
+            onDelete={deleteExpense}
+          />
+        </div>
+      )}
     </div>
+
   )
 }
 

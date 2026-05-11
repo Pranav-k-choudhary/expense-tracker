@@ -17,6 +17,9 @@ import createRoot from React DOM:-
 import { createRoot } from 'react-dom/client'
 /*import App Component:-
 -> App.jsx is the main component of the application that contains all the logic and UI for the Expense Tracker, it is imported here to be rendered inside StrictMode to ensure best practices during development.*/
+import { Auth0Provider } from "@auth0/auth0-react";
+/*import App Component:-
+-> App.jsx is the main component of the application that contains all the logic and UI for the Expense Tracker, it is imported here to be rendered inside StrictMode to ensure best practices during development.*/
 import App from './App.jsx'
 
 /*render React App:-
@@ -27,9 +30,15 @@ import App from './App.jsx'
 React will load the full app inside it.
 */
 createRoot(document.getElementById('root')).render(
-  /*StrictMode wraps App component for better development checking*/
   <StrictMode>
-    {/*main application for Expense Tracker*/}
+    <Auth0Provider
+    domain="dev-udxz7mofezzuemlw.us.auth0.com"
+    clientId="HJD1ArtZDsMflp8kAlaIe7aKxC20eoi9"
+    authorizationParams={{
+      redirect_uri: "http://localhost:5187/expense-tracker/",
+    }}
+  >
     <App />
-  </StrictMode>,
+  </Auth0Provider>
+  </StrictMode>
 )

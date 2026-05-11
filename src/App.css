@@ -84,57 +84,73 @@ body{
 	}
 }
 
-
-/*Login page*/
-/*login page container: text-align: center -> centers the content, margin-top: 80px -> adds space above the container*/
-h2{
-	margin-bottom: 30px;
-	padding: 15px;
-}
-.login-container {
-	text-align: center;
-	margin-top: 80px;
-	background-color: #97b2ce;
-	border-radius: 9px;
-
-}
-/*i/p fields styling: display: block -> makes input fields take full width, margin -> adds space around the input fields, padding -> adds space inside the input fields, width -> sets a fixed width for the input fields, border-radius -> rounds the corners of the input fields, border -> adds a border around the input fields*/
-.login-input {
-	display: block;
-	margin: 10px auto;
-	padding: 10px;
-	width: 250px;
-	border-radius: 15px;
-	border: 1px solid gray;
-}
-/*login button styling: margin -> adds space around the button, padding -> adds space inside the button, cursor: pointer -> shows hand cursor when hovered, border-radius -> rounds the corners of the button, background -> sets the background color of the button, color -> sets the text color of the button, border -> removes default border*/
-.login-btn {
-	margin: 10px;
-	padding: 10px 15px;
-	cursor: pointer;
-	border-radius: 16px;
-	background: green;
-	color: white;
-	border: none;
-}
-/*login button hover effect: background -> changes background color when hovered*/
-.login-btn:hover {
-	background: #45a049;
+/*header with logout button: display: flex -> activates Flexbox layout, justify-content: space-between -> keeps heading and logout button on opposite sides, align-items: center -> vertically centers the content, padding -> adds space inside the header*/
+.header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
 }
 
-/*logout button styling: position: absolute -> positions the button relative to the nearest positioned ancestor, top and right -> positions the button at the top-right corner of the container, background -> sets the background color of the button, color -> sets the text color of the button, border -> removes default border, padding -> adds space inside the button, border-radius -> rounds the corners of the button, cursor: pointer -> shows hand cursor when hovered*/
-.logout-btn {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	background: red;
-	color: white;
-	border: none;
-	padding: 8px 12px;
-	border-radius: 16px;
-	cursor: pointer;
+
+
+/*login page styling: height: 100vh -> makes the container take full viewport height, display: flex -> activates Flexbox layout, justify-content: center -> horizontally centers the login box, align-items: center -> vertically centers the login box*/
+.login-container{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-/*logout button hover effect: background -> changes background color when hovered*/
-.logout-btn:hover {
-	background: darkred;
+/*login box styling: background -> sets the background color, padding -> adds space inside the box, border-radius -> rounds the corners of the box, text-align: center -> centers the text, width -> sets a fixed width for the box, box-shadow -> adds a shadow effect to create a card-like appearance*/
+.login-box{
+  background: #97b2ce;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  width: 300px;
+  box-shadow: 3px 15px 39px rgba(9, 18, 27, 0.2);
+}
+/*login box heading styling: margin-bottom -> adds space below the heading, color -> sets the text color*/
+.login-box h2{
+  margin-bottom: 20px;
+  color: #333;
+}
+/*login box description styling: color -> sets the text color, font-size -> sets the size of the text, margin-bottom -> adds space below the description*/
+.login-box p{
+  color: gray;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+/*login button styling: background-color -> sets the background color, color -> sets the text color, border -> removes default border, padding -> adds space inside the button, border-radius -> rounds the corners of the button, cursor: pointer -> shows hand cursor when hovered, font-weight: bold -> makes the text bold, width: 100% -> makes the button take full width of the container, transition: 0.3s -> adds a smooth transition effect for hover state*/
+.login-btn{
+  background-color: #1f70b8;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+  transition: 0.3s;
+}
+/*login button hover effect: background-color -> changes the background color on hover, transform: scale(1.05) -> slightly enlarges the button on hover for a visual feedback effect*/
+.login-btn:hover{
+  background-color: #007bff;
+  transform: scale(1.05);
+}
+/*logout button styling: background-color -> sets the background color, color -> sets the text color, border -> removes default border, padding -> adds space inside the button, border-radius -> rounds the corners of the button, cursor: pointer -> shows hand cursor when hovered, font-weight: bold -> makes the text bold, width: 100% -> makes the button take full width of the container, transition: 0.3s -> adds a smooth transition effect for hover state*/
+.logout-btn{
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 4px 5px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+/*logout button hover effect: background-color -> changes the background color on hover, transform: scale(1.05) -> slightly enlarges the button on hover for a visual feedback effect*/
+.logout-btn:hover{
+  background-color: darkred;
+  transform: scale(1.05);
 }
