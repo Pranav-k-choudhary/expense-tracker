@@ -49,3 +49,20 @@ https://pranav-k-choudhary.github.io/expense-tracker/
 - Deploy to GitHub Pages using `npm run deploy`
 - Website is accessible online
 
+## Authentication (Auth0)
+
+This project uses Auth0 for secure and easy user authentication.
+
+--> Features
+- secure login & signup system
+- google / social login support (if enabled in Auth0)
+- automatic login state persistence
+- logout functionality with redirect
+
+## How Authentication Works:-
+- when the user opens the app, Auth0 checks if the user is already logged in.
+- if not authenticated, the Login page is shown.
+- on clicking Login, user is redirected to Auth0 Universal Login page.
+- after successful login, Auth0 redirects back to the application.
+- clicking Logout clears the session and redirects the user back to the login screen.
+
