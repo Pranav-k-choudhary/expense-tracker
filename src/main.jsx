@@ -35,7 +35,7 @@ createRoot(document.getElementById('root')).render(
     domain="dev-udxz7mofezzuemlw.us.auth0.com"
     clientId="HJD1ArtZDsMflp8kAlaIe7aKxC20eoi9"
     authorizationParams={{
-      redirect_uri: "http://localhost:5187/expense-tracker/",
+      redirect_uri: window.location.origin + "/expense-tracker/",
     }}
   >
     <App />

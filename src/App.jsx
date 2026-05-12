@@ -57,7 +57,7 @@ function App() {
               onClick={() =>
                 logout({
                   logoutParams: {
-                    returnTo: "http://localhost:5187/expense-tracker/",
+                    returnTo: window.location.origin + "/expense-tracker/",
                   },
                 })
               }
