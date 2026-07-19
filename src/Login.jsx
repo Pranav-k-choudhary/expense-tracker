@@ -1,55 +1,100 @@
-/* Login.jsx: This component handles user authentication using Auth0. It displays a login button for unauthenticated users and a welcome message with a logout button for authenticated users. The component also shows a loading state while the authentication status is being determined. */
-import { useAuth0 } from "@auth0/auth0-react";
+import { useState } from 'react'
 import './App.css'
-function Login() {
-  const {
-    loginWithRedirect,
-    logout,
-    user,
-    isAuthenticated,
-    isLoading,
-  } = useAuth0();
 
-  if (isLoading) return <h2>Loading...</h2>;
+function Login({ onLogin }) {
+  const [isRegistering, setIsRegistering] = useState(false)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  /*work flow:-
-  --> If user is not authenticated, show login button.
-  --> On clicking login button, it triggers loginWithRedirect() which redirects user to Auth0 login page.
-  */
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    setError('')
+    setIsSubmitting(true)
+
+    try {
+      const endpoint = isRegistering ? '/api/auth/register' : '/api/auth/login'
+      const payload = isRegistering
+        ? { name, email, password }
+        : { email, password }
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Authentication failed')
+      }
+
+      onLogin(data.token, data.user)
+    } catch (submitError) {
+      setError(submitError.message)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <div className="login-container">
       <div className="login-box">
         <h2>Expense Tracker</h2>
+        <p>{isRegistering ? 'Create your account' : 'Login to your account'}</p>
 
-        {isAuthenticated ? (
-          <>
-            <h3>Welcome {user.name}</h3>
-            <p>{user.email}</p>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          {isRegistering && (
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          )}
 
-            <button
-              className="logout-btn"
-              onClick={() =>
-                logout({
-                  logoutParams: {
-                    returnTo: window.location.origin + "/expense-tracker/",
-                  },
-                })
-              }
-            >
-              Logout
-            </button>
-          </>
-        ) : (
-          <button
-            className="login-btn"
-            onClick={() => loginWithRedirect()}
-          >
-            Login
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          {error && <p className="error-message">{error}</p>}
+
+          <button className="login-btn" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Please wait...' : isRegistering ? 'Register' : 'Login'}
           </button>
-        )}
+        </form>
+
+        <button
+          className="toggle-auth-btn"
+          type="button"
+          onClick={() => {
+            setIsRegistering((prev) => !prev)
+            setError('')
+          }}
+        >
+          {isRegistering ? 'Already have an account? Login' : 'New user? Register'}
+        </button>
       </div>
     </div>
-  );
+  )
 }
 
 export default Login;

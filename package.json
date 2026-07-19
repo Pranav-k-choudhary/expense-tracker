@@ -6,6 +6,8 @@
   "homepage": "https://Pranav-k-choudhary.github.io/expense-tracker",
   "scripts": {
     "dev": "vite",
+    "server": "node server/index.js",
+    "server:dev": "nodemon server/index.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -13,7 +15,12 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^2.16.2",
+    "bcryptjs": "^3.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.8.4",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
@@ -27,6 +34,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "gh-pages": "^6.3.0",
     "globals": "^17.5.0",
+    "nodemon": "^3.1.9",
     "vite": "^8.0.10"
   }
 }

@@ -1,35 +1,55 @@
-/*expenseList component:- purpose:- this component is used to display all expenses.
-why this file is important:- it receives the full expenses array from App.jsx and shows all expense items using ExpenseItem component.
-main Concepts Used:-
---> props -> to receive data and functions from parent
---> conditional rendering -> show message if no expenses exist
---> map() -> to display multiple expense items
---> reusable Component -> uses ExpenseItem multiple times
---> useState -> to manage local state, useEffect -> to perform side effects like data fetching api's, localStorage -> to persist data, reduce() -> to calculate total expenses, event handling -> to handle delete action, props drilling -> to pass data/functions through components.*/
-import { useState, useEffect } from 'react'
-//ExpenseItem component is imported to display each individual expense item in the list
 import ExpenseItem from './ExpenseItem'
-//ExpenseList component receives expenses array and onDelete function as props from App.jsx, it uses these props to display the list of expenses and handle deletion of expenses.
-function ExpenseList({ expenses, onDelete }) {
-  /*props received:-
-  expenses -> full array of all expenses (Example:[{ id: 1, title: "Food", amount: 200 }, { id: 2, title: "Travel", amount: 500 }]),
-  onDelete -> function used to delete expense
-  conditional rendering:-
-  if no expenses are available -> show message: "No Expenses Yet"*/
-    if(expenses.length === 0){
-        return <p className='no-expense '>No Expenses Yet</p>
+
+function ExpenseList({ expenses, onDelete, onEdit }) {
+  if (expenses.length === 0) {
+    return <p className="no-expense">No Expenses Yet</p>
+  }
+
+  const groupByMonth = expenses.reduce((accumulator, item) => {
+    const date = new Date(item.createdAt || Date.now())
+    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+
+    if (!accumulator[monthKey]) {
+      accumulator[monthKey] = []
     }
-  
-    /*expense list UI:-
-    --> expense-list -> css class for styling
-    --> map() is used to loop through all expenses 
-    --> For every expense item: ExpenseItem component is created
-    --> key={item.id} -> React uses key for better performance and unique identification, onDelete={onDelete} -> passes the delete function to each ExpenseItem*/
-    return (
-    <div className="expense-list">
-       {expenses.map((item) => (
-            <ExpenseItem key={item.id} item={item} onDelete={onDelete}  />
-       ))}
+
+    accumulator[monthKey].push(item)
+    return accumulator
+  }, {})
+
+  const monthEntries = Object.entries(groupByMonth).sort(([a], [b]) => b.localeCompare(a))
+
+  return (
+    <div className="month-table-wrapper">
+      {monthEntries.map(([monthKey, items]) => {
+        const [year, month] = monthKey.split('-')
+        const monthLabel = new Date(Number(year), Number(month) - 1).toLocaleString('en-US', {
+          month: 'long',
+          year: 'numeric',
+        })
+
+        return (
+          <div className="month-card" key={monthKey}>
+            <h3>{monthLabel}</h3>
+            <table className="expense-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Amount</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((item) => (
+                  <ExpenseItem key={item._id || item.id} item={item} onDelete={onDelete} onEdit={onEdit} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
+      })}
     </div>
   )
 }

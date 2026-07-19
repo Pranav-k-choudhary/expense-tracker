@@ -1,108 +1,134 @@
-/*reset*/
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-/*body: used to center the complete application on the screen, display: flex -> activates Flexbox layout, align-items: center -> vertically centers the application, justify-content: center -> horizontally centers the application*/
-body{
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-/*main container of the application: max-width -> sets a maximum width for the container, margin -> adds space around the container, background -> sets a background color, padding -> adds space inside the container, border-radius -> rounds the corners of the container, box-shadow -> adds a shadow effect to create a card-like appearance*/
-.app-container{
-	position: relative;
-	max-width: 500px;
-	margin: 40px;
-	background: #97b2ce;
-	padding: 20px;
-	border-radius: 12px;
-	box-shadow: 0 0 8px rgba(0,0,0,0.1);
-}
-/*header section: text-align: center -> centers heading text, margin-bottom: 55px -> adds space below the header*/
-.header{
-	text-align: center;
-	margin-bottom: 55px;
-}
-/*expense form layout: display: flex -> keeps input fields and button in one row, gap -> creates space between them, margin-bottom -> adds space below the form*/
-.expense-form{
-	display: flex;
-	gap: 10px;
-	margin-bottom: 20px;
-}
-/*i/p fields styling: flex: 1 -> i/p takes available space equally, padding -> adds space inside the input field, border-radius -> rounds the corners of the input field*/
-.expense-form input {
-	flex: 1;
-	padding: 8px;
-	border-radius: 19px;
-}
-/*add expense btn styling: cursor: pointer -> shows hand cursor when hovered, padding -> adds space inside the btn, border-radius -> rounds the corners of the btn, background-color -> sets the background color of the btn*/
-.expense-form button {
-	padding: 8px 12px;
-	cursor: pointer;
-	border-radius: 19px;
-	background-color: green;
-}
-.expense-form button:hover {
-	background-color: #45a049;
-}
-/*expense list container: flex-direction: column -> expenses shown vertically, gap -> creates space between them*/
-.expense-list {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-}
-/*each expense item card: display: flex -> activates Flexbox layout, justify-content: space-between -> keeps title, amount, and delete button properly spaced, align-items: center -> vertically centers the content, background: white -> sets the background color, padding -> adds space inside the card, border-radius -> rounds the corners of the card*/
-.expense-item {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	background: white;
-	padding: 10px;
-	border-radius: 8px;
-}
-/*shown when no any expense exists*/
-.no-expense {
-	text-align: center;
-	color: #252424;
-}
-/*fore mobile*/
-/*when screen width is less than 600px then app container is adjusted*/
-@media(max-width: 600px){
-	.app-container {
-		max-width: 100%;
-		padding: 15px;
-	}
-
-	.expense-form {
-		flex-direction: column;
-	}
-
-	.expense-form button {
-		width: 100%;
-	}
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/*header with logout button: display: flex -> activates Flexbox layout, justify-content: space-between -> keeps heading and logout button on opposite sides, align-items: center -> vertically centers the content, padding -> adds space inside the header*/
-.header{
+body {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: #f5f7fb;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.app-container {
+  position: relative;
+  max-width: 900px;
+  margin: 40px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
+}
+
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
+  margin-bottom: 20px;
 }
 
+.expense-form {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
 
+.expense-form input {
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #d0d7de;
+}
 
-/*login page styling: height: 100vh -> makes the container take full viewport height, display: flex -> activates Flexbox layout, justify-content: center -> horizontally centers the login box, align-items: center -> vertically centers the login box*/
-.login-container{
+.expense-form button {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 10px;
+  border: none;
+  background-color: green;
+  color: #fff;
+}
+
+.expense-form button:hover {
+  background-color: #45a049;
+}
+
+.total {
+  margin-bottom: 16px;
+}
+
+.loading-text {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.month-table-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.month-card {
+  background: #f8fbff;
+  border: 1px solid #d8e5f5;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.month-card h3 {
+  margin-bottom: 12px;
+}
+
+.expense-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.expense-table th,
+.expense-table td {
+  border: 1px solid #d8e5f5;
+  padding: 8px;
+  text-align: left;
+}
+
+.expense-table th {
+  background: #ebf3ff;
+}
+
+.expense-row td {
+  background: #fff;
+}
+
+.action-cell {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.edit-btn,
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.no-expense {
+  text-align: center;
+  color: #252424;
+}
+
+.login-container {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-/*login box styling: background -> sets the background color, padding -> adds space inside the box, border-radius -> rounds the corners of the box, text-align: center -> centers the text, width -> sets a fixed width for the box, box-shadow -> adds a shadow effect to create a card-like appearance*/
-.login-box{
+
+.login-box {
   background: #97b2ce;
   padding: 40px;
   border-radius: 12px;
@@ -110,19 +136,19 @@ body{
   width: 300px;
   box-shadow: 3px 15px 39px rgba(9, 18, 27, 0.2);
 }
-/*login box heading styling: margin-bottom -> adds space below the heading, color -> sets the text color*/
-.login-box h2{
+
+.login-box h2 {
   margin-bottom: 20px;
   color: #333;
 }
-/*login box description styling: color -> sets the text color, font-size -> sets the size of the text, margin-bottom -> adds space below the description*/
-.login-box p{
+
+.login-box p {
   color: gray;
   font-size: 14px;
   margin-bottom: 20px;
 }
-/*login button styling: background-color -> sets the background color, color -> sets the text color, border -> removes default border, padding -> adds space inside the button, border-radius -> rounds the corners of the button, cursor: pointer -> shows hand cursor when hovered, font-weight: bold -> makes the text bold, width: 100% -> makes the button take full width of the container, transition: 0.3s -> adds a smooth transition effect for hover state*/
-.login-btn{
+
+.login-btn {
   background-color: #1f70b8;
   color: white;
   border: none;
@@ -133,24 +159,92 @@ body{
   width: 100%;
   transition: 0.3s;
 }
-/*login button hover effect: background-color -> changes the background color on hover, transform: scale(1.05) -> slightly enlarges the button on hover for a visual feedback effect*/
-.login-btn:hover{
+
+.login-btn:hover {
   background-color: #007bff;
   transform: scale(1.05);
 }
-/*logout button styling: background-color -> sets the background color, color -> sets the text color, border -> removes default border, padding -> adds space inside the button, border-radius -> rounds the corners of the button, cursor: pointer -> shows hand cursor when hovered, font-weight: bold -> makes the text bold, width: 100% -> makes the button take full width of the container, transition: 0.3s -> adds a smooth transition effect for hover state*/
-.logout-btn{
+
+.logout-btn {
   background-color: red;
   color: white;
   border: none;
-  padding: 4px 5px;
+  padding: 4px 8px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
   transition: 0.3s;
 }
-/*logout button hover effect: background-color -> changes the background color on hover, transform: scale(1.05) -> slightly enlarges the button on hover for a visual feedback effect*/
-.logout-btn:hover{
+
+.logout-btn:hover {
   background-color: darkred;
   transform: scale(1.05);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-badge {
+  font-weight: bold;
+  color: #0f172a;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #c6d2e0;
+}
+
+.toggle-auth-btn {
+  margin-top: 12px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #0f4c81;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.error-message {
+  color: #b42318;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+@media (max-width: 768px) {
+  .expense-form {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-container {
+    max-width: 100%;
+    padding: 15px;
+    margin: 12px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .expense-form {
+    grid-template-columns: 1fr;
+  }
+
+  .expense-table {
+    display: block;
+    overflow-x: auto;
+  }
 }

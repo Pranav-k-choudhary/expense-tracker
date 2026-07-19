@@ -1,82 +1,161 @@
-/*This is the main parent component of the project, why this file is important -> it controls the complete Expense Tracker logic.
-Main Concepts Used:-
---> useState -> to store expenses
--->useEffect -> to save data in localStorage
---> localStorage -> to save data permanently
---> reduce() -> to calculate total expenses
---> Props -> to pass functions/data to child components
-*/
 import { useState, useEffect } from 'react'
 import ExpenseForm from './ExpenseForm'
 import ExpenseList from './ExpenseList'
-import { useAuth0 } from "@auth0/auth0-react";
-import Login from "./Login";
+import Login from './Login'
 import './App.css'
 
 function App() {
-  const { isAuthenticated, logout } = useAuth0();
-
-  /*useState with function initialization, why -> it loads saved expenses from localStorage when app starts, if data exists -> JSON.parse converts string to array, else -> empty array []*/
-  const [expenses, setExpenses] = useState(() => {
-    const saved = localStorage.getItem("expenses")
-    return saved ? JSON.parse(saved) : [];
+  const [expenses, setExpenses] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentUser, setCurrentUser] = useState(() => {
+    const savedUser = localStorage.getItem('expenseTrackerUser')
+    return savedUser ? JSON.parse(savedUser) : null
   })
+  const [authToken, setAuthToken] = useState(() => localStorage.getItem('expenseTrackerToken') || '')
 
-  /*useEffect runs whenever expenses change, why -> it saves latest expenses into localStorage, this helps data remain even after page refresh*/
+  const isAuthenticated = Boolean(authToken && currentUser)
+
+  const saveSession = (token, user) => {
+    setAuthToken(token)
+    setCurrentUser(user)
+    localStorage.setItem('expenseTrackerToken', token)
+    localStorage.setItem('expenseTrackerUser', JSON.stringify(user))
+  }
+
+  const clearSession = () => {
+    setAuthToken('')
+    setCurrentUser(null)
+    localStorage.removeItem('expenseTrackerToken')
+    localStorage.removeItem('expenseTrackerUser')
+  }
+
+  const loadExpenses = async () => {
+    setIsLoading(true)
+
+    try {
+      const response = await fetch('/api/expenses', {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Unable to load expenses from backend')
+      }
+
+      const data = await response.json()
+      setExpenses(data)
+      localStorage.setItem('expenses', JSON.stringify(data))
+    } catch {
+      const saved = localStorage.getItem('expenses')
+      setExpenses(saved ? JSON.parse(saved) : [])
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   useEffect(() => {
-    localStorage.setItem("expenses", JSON.stringify(expenses))
-  },[expenses])
+    if (isAuthenticated) {
+      loadExpenses()
+    }
+  }, [authToken])
 
-  /*add new expense, prev -> previous expenses array, [...prev, expense] -> old expenses + new expense*/
-  const addExpense = (expense) => {
-    setExpenses((prev) => [...prev, expense] )
+  useEffect(() => {
+    localStorage.setItem('expenses', JSON.stringify(expenses))
+  }, [expenses])
+
+  const addExpense = async (expense) => {
+    try {
+      const response = await fetch('/api/expenses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(expense),
+      })
+
+      if (!response.ok) {
+        throw new Error('Could not save expense')
+      }
+
+      await loadExpenses()
+    } catch {
+      setExpenses((prev) => [...prev, expense])
+    }
   }
 
-  /*delete expense using id, filter() -> remove selected expense*/
-  const deleteExpense = (id) => {
-    setExpenses((prev) => prev.filter((item) => item.id != id) )
+  const deleteExpense = async (id) => {
+    try {
+      const response = await fetch(`/api/expenses/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Could not delete expense')
+      }
+
+      await loadExpenses()
+    } catch {
+      setExpenses((prev) => prev.filter((item) => item._id ? item._id !== id : item.id !== id))
+    }
   }
 
-  /*reduce(), used to calculate total expenses, sum -> accumulated(jama hua total) value, item.amount -> each expense amount*/
-  const totalExpenses  = expenses.reduce((sum, item) => sum + item.amount, 0)
+  const updateExpense = async (id, updatedData) => {
+    try {
+      const response = await fetch(`/api/expenses/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(updatedData),
+      })
 
-  /*useAuth0 hook to get logout function, why -> we need it to log out user from Auth0 when they click logout button*/
+      if (!response.ok) {
+        throw new Error('Could not update expense')
+      }
+
+      await loadExpenses()
+    } catch {
+      setExpenses((prev) => prev.map((item) => {
+        const matches = item._id ? item._id === id : item.id === id
+        return matches ? { ...item, ...updatedData } : item
+      }))
+    }
+  }
+
+  const totalExpenses = expenses.reduce((sum, item) => sum + Number(item.amount || 0), 0)
+
   return (
-
     <div>
       {!isAuthenticated ? (
-        <Login />
+        <Login onLogin={saveSession} />
       ) : (
         <div className="app-container">
-          {/*header with logout*/}
           <div className="header">
             <h1>💰 Expense Tracker</h1>
-
-            <button
-              className="logout-btn"
-              onClick={() =>
-                logout({
-                  logoutParams: {
-                    returnTo: window.location.origin + "/expense-tracker/",
-                  },
-                })
-              }
-            >
-              Logout
-            </button>
+            <div className="header-actions">
+              <span className="user-badge">Hi, {currentUser.name}</span>
+              <button className="logout-btn" onClick={clearSession}>Logout</button>
+            </div>
           </div>
+
           <ExpenseForm onAddExpense={addExpense} />
-          <h3 className="total">
-            Total Expense: ₹{totalExpenses.toFixed(2)}
-          </h3>
-          <ExpenseList
-            expenses={expenses}
-            onDelete={deleteExpense}
-          />
+
+          <h3 className="total">Total Expense: ₹{totalExpenses.toFixed(2)}</h3>
+
+          {isLoading ? (
+            <p className="loading-text">Loading monthly data...</p>
+          ) : (
+            <ExpenseList expenses={expenses} onDelete={deleteExpense} onEdit={updateExpense} />
+          )}
         </div>
       )}
     </div>
-
   )
 }
 
